@@ -30,7 +30,7 @@ namespace ik {
         vector<Matrix> matrices;
         Matrix *matrix;
         int numLinks;
-
+        Chain() {}
         Chain(const char *id, const vector<float> &theta, const vector<float> &radius, const vector<float> &alpha,
               const vector<float> &dOffset) : id(id), theta(theta), radius(radius), alpha(alpha), dOffset(dOffset) {
 
@@ -48,9 +48,11 @@ namespace ik {
             calcPosition();
             positionZero = position;
         }
+
         vector<float> positionOffset(vector<float> offset) {
             return vectorAdd(positionZero, offset);
         }
+
         void calcPosition() {
             buildMatrices();
             matrix = matrices.at(0).copy();
