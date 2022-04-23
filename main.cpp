@@ -14,11 +14,15 @@ int main() {
         chains[i].print();
     }
 
-    chains[0].targetAngle = ik3d(&chains[0], {43,43,50});
+    vector<float> target = chains[0].position;
+    target.at(2) = 50;
+    chains[0].targetAngle = ik3d(&chains[0], target);
+
     while(!chains[0].atTarget()) {
         chains[0].moveTowardTarget(1);
         chains[0].print();
     }
+
 
     return 0;
 }

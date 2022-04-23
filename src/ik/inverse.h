@@ -48,18 +48,18 @@ namespace ik {
 
 
         // Calc angles relative to ZERO
-        /*
+
         // ikCoxaAngle in degrees
-        float coxa = atan2(pos.y, pos.x) * 180 / PI - chain->links[0].getThetaBase();
+        float coxa = atan2(y, x) * 180 / PI - chain->theta.at(0);
 
         // ikFemurAngle in degrees
-        float femur = -(radiansFemurTibiaGround + radiansFemurTibia) * 180 / PI + 90 - chain->links[1].getThetaBase();
+        float femur = -(radiansFemurTibiaGround + radiansFemurTibia) * 180 / PI + 90 - chain->theta.at(1);
 
         // ikTibiaAngle in degrees
-        float tibia = -(chain->links[2].getThetaZero() - (((acos((pow(femur_length, 2) + pow(tibia_length, 2) - pow(lenFemurToTibia, 2)) /
+        float tibia = (chain->theta.at(2) - (((acos((pow(femur_length, 2) + pow(tibia_length, 2) - pow(lenFemurToTibia, 2)) /
                                       (2 * femur_length * tibia_length))) * 180) / PI));
 
-        */
+        /*
         float coxa = atan2(y, x) * 180 / PI;
 
         // ikFemurAngle in degrees
@@ -68,6 +68,7 @@ namespace ik {
         // ikTibiaAngle in degrees
         float tibia = ((((acos((pow(femur_length, 2) + pow(tibia_length, 2) - pow(lenFemurToTibia, 2)) /
                                (2 * femur_length * tibia_length))) * 180) / PI));
+                               */
 
         vector<float> result = {coxa, femur, tibia};
 

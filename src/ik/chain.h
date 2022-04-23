@@ -31,14 +31,18 @@ namespace ik {
         int numLinks;
 
         Chain(const char *id, const vector<float> &theta, const vector<float> &radius, const vector<float> &alpha,
-              const vector<float> &dOffset) : id(id), theta(theta), angle(theta), targetAngle(theta), radius(radius), alpha(alpha), dOffset(dOffset) {
+              const vector<float> &dOffset) : id(id), theta(theta), radius(radius), alpha(alpha), dOffset(dOffset) {
 
             // Set num links
             numLinks = theta.size();
 
+            //targetAngle = theta;
+            //angle = theta;
             // Initialize link fk matrices
             for (int i = 0; i < numLinks; i++) {
                 matrices.push_back({4, 4, new float[16]});
+                angle.push_back(0);
+                targetAngle.push_back(0);
             }
             // Create chain fk matrix
             matrix = new Matrix(4, 4);
@@ -67,7 +71,7 @@ namespace ik {
         void buildLinkMatrix(int index) {
             float *data = new float[16];
 
-            float t = angle.at(index);
+            float t = angle.at(index)+theta.at(index);
             float a = alpha.at(index);
             float r = radius.at(index);
             float d = dOffset.at(index);
