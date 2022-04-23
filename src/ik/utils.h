@@ -30,5 +30,13 @@ namespace ik {
         printf("}\n");
     }
 
+    vector<float> vectorAdd(vector<float> v, vector<float> offset) {
+        vector<float> newVec;
+        for(int i=0; i < v.size(); i++) {
+            newVec.push_back(v.at(i) + offset.at(i));
+        }
+        return newVec;
+    }
+
 }
 #endif //IK_UTILS_H

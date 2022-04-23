@@ -50,7 +50,7 @@ namespace ik {
         // Calc angles relative to ZERO
 
         // ikCoxaAngle in degrees
-        float coxa = atan2(y, x) * 180 / PI - chain->theta.at(0);
+        float coxa = -(atan2(y, x) * 180 / PI - chain->theta.at(0));
 
         // ikFemurAngle in degrees
         float femur = -(radiansFemurTibiaGround + radiansFemurTibia) * 180 / PI + 90 - chain->theta.at(1);

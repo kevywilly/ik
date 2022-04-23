@@ -26,6 +26,7 @@ namespace ik {
         vector<float> angle;
         vector<float> targetAngle;
         vector<float> position;
+        vector<float> positionZero;
         vector<Matrix> matrices;
         Matrix *matrix;
         int numLinks;
@@ -36,8 +37,6 @@ namespace ik {
             // Set num links
             numLinks = theta.size();
 
-            //targetAngle = theta;
-            //angle = theta;
             // Initialize link fk matrices
             for (int i = 0; i < numLinks; i++) {
                 matrices.push_back({4, 4, new float[16]});
@@ -47,8 +46,11 @@ namespace ik {
             // Create chain fk matrix
             matrix = new Matrix(4, 4);
             calcPosition();
+            positionZero = position;
         }
-
+        vector<float> positionOffset(vector<float> offset) {
+            return vectorAdd(positionZero, offset);
+        }
         void calcPosition() {
             buildMatrices();
             matrix = matrices.at(0).copy();
