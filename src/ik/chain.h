@@ -23,13 +23,14 @@ namespace ik {
         const vector<float> alpha;
         const vector<float> dOffset;
 
-        vector<float> angle;
-        vector<float> targetAngle;
+        vector<float> angles;
+        vector<float> targetAngles;
         vector<float> position;
         vector<float> positionZero;
         vector<Matrix> matrices;
         Matrix *matrix;
         int numLinks;
+
         Chain() {}
         Chain(const char *id, const vector<float> &theta, const vector<float> &radius, const vector<float> &alpha,
               const vector<float> &dOffset) : id(id), theta(theta), radius(radius), alpha(alpha), dOffset(dOffset) {
@@ -40,8 +41,8 @@ namespace ik {
             // Initialize link fk matrices
             for (int i = 0; i < numLinks; i++) {
                 matrices.push_back({4, 4, new float[16]});
-                angle.push_back(0);
-                targetAngle.push_back(0);
+                angles.push_back(0);
+                targetAngles.push_back(0);
             }
             // Create chain fk matrix
             matrix = new Matrix(4, 4);
@@ -56,7 +57,7 @@ namespace ik {
         void calcPosition() {
             buildMatrices();
             matrix = matrices.at(0).copy();
-            for (int i = 1; i < angle.size(); i++) {
+            for (int i = 1; i < angles.size(); i++) {
                 if (i > 0)
                     matrix = (*matrix * &matrices.at(i));
             }
@@ -67,7 +68,7 @@ namespace ik {
         }
 
         void buildMatrices() {
-            for (int i = 0; i < angle.size(); i++) {
+            for (int i = 0; i < angles.size(); i++) {
                 buildLinkMatrix(i);
             }
         }
@@ -75,7 +76,7 @@ namespace ik {
         void buildLinkMatrix(int index) {
             float *data = new float[16];
 
-            float t = angle.at(index)+theta.at(index);
+            float t = angles.at(index) + theta.at(index);
             float a = alpha.at(index);
             float r = radius.at(index);
             float d = dOffset.at(index);
@@ -105,15 +106,15 @@ namespace ik {
 
         void print() {
             printf("{");
-            printf("\n\t\"id\":\"%s\"", id);
+            printf("\n\t\"chain-id\":\"%s\",", id);
             printf("\n\t\"theta\":");
             printVector(theta);
             printf(",");
-            printf("\n\t\"angle\":");
-            printVector(angle);
+            printf("\n\t\"angles\":");
+            printVector(angles);
             printf(",");
-            printf("\n\t\"target-angle\":");
-            printVector(targetAngle);
+            printf("\n\t\"target-angles\":");
+            printVector(targetAngles);
             printf(",");
             printf("\n\t\"radius\":");
             printVector(radius);
@@ -129,21 +130,21 @@ namespace ik {
         void moveTowardTarget(float step) {
             if(atTarget())
                 return;
-            for(int i=0; i < angle.size(); i++) {
-                float diff = targetAngle[i] - angle[i];
+            for(int i=0; i < angles.size(); i++) {
+                float diff = targetAngles[i] - angles[i];
                 if(diff == 0) {
                     continue;
                 }
                 if(abs(diff) < abs(step)) {
-                    angle[i] = targetAngle[i];
+                    angles[i] = targetAngles[i];
                 } else {
-                    angle[i] = diff > 0 ? angle[i] + step : angle[i] - step;
+                    angles[i] = diff > 0 ? angles[i] + step : angles[i] - step;
                 }
             }
             calcPosition();
         }
         bool atTarget() {
-            return angle == targetAngle;
+            return angles == targetAngles;
         }
     };
 

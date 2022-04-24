@@ -59,17 +59,6 @@ namespace ik {
         float tibia = (chain->theta.at(2) - (((acos((pow(femur_length, 2) + pow(tibia_length, 2) - pow(lenFemurToTibia, 2)) /
                                       (2 * femur_length * tibia_length))) * 180) / PI));
 
-        /*
-        float coxa = atan2(y, x) * 180 / PI;
-
-        // ikFemurAngle in degrees
-        float femur = -(radiansFemurTibiaGround + radiansFemurTibia) * 180 / PI + 90;
-
-        // ikTibiaAngle in degrees
-        float tibia = ((((acos((pow(femur_length, 2) + pow(tibia_length, 2) - pow(lenFemurToTibia, 2)) /
-                               (2 * femur_length * tibia_length))) * 180) / PI));
-                               */
-
         vector<float> result = {coxa, femur, tibia};
 
         return result;
