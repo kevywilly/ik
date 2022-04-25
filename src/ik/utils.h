@@ -7,6 +7,7 @@
 
 #include <vector>
 #include <stdio.h>
+#include "types.h"
 
 using namespace std;
 namespace ik {
@@ -36,6 +37,14 @@ namespace ik {
             newVec.push_back(v.at(i) + offset.at(i));
         }
         return newVec;
+    }
+
+    transform_matrix_t add(transform_matrix_t a, transform_matrix_t b) {
+        transform_matrix_t m;
+        for(int i=0; i < a.size(); i++) {
+            m.push_back(vectorAdd(a.at(i), b.at(i)));
+        }
+        return m;
     }
 
 }

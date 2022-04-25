@@ -9,6 +9,7 @@
 #include "utils.h"
 #include "math.h"
 #include "matrix.h"
+#include "types.h"
 
 using namespace std;
 
@@ -16,24 +17,26 @@ namespace ik {
     constexpr double RADIANS = 0.0174533;
 
     class Chain {
+
     public:
         const char *id;
-        const vector<float> theta;
-        const vector<float> radius;
-        const vector<float> alpha;
-        const vector<float> dOffset;
+        const float_vect_t theta;
+        const float_vect_t radius;
+        const float_vect_t alpha;
+        const float_vect_t dOffset;
+        float_vect_t targetAngles;
 
-        vector<float> angles;
-        vector<float> targetAngles;
-        vector<float> position;
-        vector<float> positionZero;
+        float_vect_t angles;
+
+        float_vect_t position;
+        float_vect_t positionZero;
         vector<Matrix> matrices;
         Matrix *matrix;
         int numLinks;
 
         Chain() {}
-        Chain(const char *id, const vector<float> &theta, const vector<float> &radius, const vector<float> &alpha,
-              const vector<float> &dOffset) : id(id), theta(theta), radius(radius), alpha(alpha), dOffset(dOffset) {
+        Chain(const char *id, const float_vect_t &theta, const float_vect_t &radius, const float_vect_t &alpha,
+              const float_vect_t &dOffset) : id(id), theta(theta), radius(radius), alpha(alpha), dOffset(dOffset) {
 
             // Set num links
             numLinks = theta.size();
@@ -48,10 +51,6 @@ namespace ik {
             matrix = new Matrix(4, 4);
             calcPosition();
             positionZero = position;
-        }
-
-        vector<float> positionOffset(vector<float> offset) {
-            return vectorAdd(positionZero, offset);
         }
 
         void calcPosition() {
@@ -127,9 +126,16 @@ namespace ik {
             printf("\n}\n");
         }
 
+        void moveToTarget() {
+            angles = targetAngles;
+        }
         void moveTowardTarget(float step) {
             if(atTarget())
                 return;
+            if(step == 0) {
+                moveToTarget();
+                return;
+            }
             for(int i=0; i < angles.size(); i++) {
                 float diff = targetAngles[i] - angles[i];
                 if(diff == 0) {

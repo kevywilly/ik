@@ -13,25 +13,14 @@ int main() {
             Chain("c3", {45,0,90}, {24,38,82}, {90,0,0},{0,0,0})
     };
 
-    // Print the chains
-    for(int i=0; i < 4; i++) {
-        chains[i].print();
-    }
-
+    chains[0].print();
     // Modify target position for chain 0 and 1.
-    chains[0].targetAngles = chains[1].targetAngles = ik3d(&chains[0], chains[0].positionOffset({10, 0, -20}));
+    chains[0].targetAngles = ik3d_transform(&chains[0], {0, 10, 0});
     while(!chains[0].atTarget()) {
         chains[0].moveTowardTarget(1);
     }
     chains[0].print();
-    chains[1].print();
 
-    chains[0].targetAngles = chains[1].targetAngles = ik3d(&chains[0], chains[0].positionOffset({10, 0, 0}));
-    while(!chains[0].atTarget()) {
-        chains[0].moveTowardTarget(1);
-    }
-    chains[0].print();
-    chains[1].print();
 
     return 0;
 }

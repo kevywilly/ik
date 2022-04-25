@@ -8,6 +8,7 @@
 #include <vector>
 #include <math.h>
 #include "chain.h"
+#include "types.h"
 
 #ifndef DEGREES
 #define DEGREES 57.296
@@ -18,15 +19,15 @@
 
 namespace ik {
 
-    vector<float> ik3d(Chain *chain, vector<float> pos) {
+    vector<float> ik3d_transform(Chain *chain, transform_t transform) {
 
         float coxa_length = chain->radius.at(0);
         float femur_length = chain->radius.at(1);
         float tibia_length = chain->radius.at(2);
 
-        float x = pos.at(0);
-        float y = pos.at(1);
-        float z = pos.at(2);
+        float x = transform.at(0) + chain->positionZero.at(0);
+        float y = transform.at(1) + chain->positionZero.at(1);;
+        float z = transform.at(2) + chain->positionZero.at(2);;
 
         float lenFemurToTibia;                       // Length between Femur and Tibia
         float radiansFemurTibiaGround;  // Angle of the line Femur and Tibia with respect to the ground in radians
@@ -50,7 +51,7 @@ namespace ik {
         // Calc angles relative to ZERO
 
         // ikCoxaAngle in degrees
-        float coxa = -(atan2(y, x) * 180 / PI - chain->theta.at(0));
+        float coxa = (atan2(y, x) * 180 / PI - chain->theta.at(0));
 
         // ikFemurAngle in degrees
         float femur = -(radiansFemurTibiaGround + radiansFemurTibia) * 180 / PI + 90 - chain->theta.at(1);
